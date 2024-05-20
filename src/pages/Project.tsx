@@ -2,7 +2,7 @@ import { KanbanBoard } from "@/sections/KanbanBoard";
 
 export const Project = () => {
   return (
-    <div>
+    <div className="w-full">
       <KanbanBoard />
     </div>
   );
