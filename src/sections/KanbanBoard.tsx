@@ -3,9 +3,18 @@ import { Column } from "@/types";
 import { PlusCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 import { ColumnContainer } from "./ColumnContainer";
-import { DndContext, DragStartEvent } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+} from "@dnd-kit/core";
 import { SortableContext } from "@dnd-kit/sortable";
+import { createPortal } from "react-dom";
 
+const generateId = () => {
+  return Math.random().toString(36).substr(2, 9);
+};
 export const KanbanBoard = () => {
   const [columns, setColumns] = useState<Column[]>([]);
 
@@ -14,7 +23,7 @@ export const KanbanBoard = () => {
     [columns]
   );
 
-  console.log(columns);
+  const [activeColumn, setActiveColumn] = useState<Column | null>(null);
 
   const createNewColumn = () => {
     const columnToAdd: Column = {
@@ -30,12 +39,26 @@ export const KanbanBoard = () => {
     setColumns(filteredColumns);
   };
 
-  const generateId = () => {
-    return Math.random().toString(36).substr(2, 9);
-  };
-
   const onDragStart = (event: DragStartEvent) => {
     console.log("DRAG START", event);
+
+    if (event.active.data.current?.type === "column") {
+      setActiveColumn(event.active.data.current.column);
+      return;
+    }
+  };
+
+  const onDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over) return;
+
+    const activeColumnId = active.id;
+    const overColumnId = over.id;
+
+    if (activeColumnId !== overColumnId) {
+      return;
+    }
   };
 
   return (
@@ -71,6 +94,18 @@ export const KanbanBoard = () => {
             Añadir Columna
           </Button>
         </div>
+
+        {createPortal(
+          <DragOverlay>
+            {activeColumn && (
+              <ColumnContainer
+                column={activeColumn}
+                deleteColumn={deleteColumn}
+              />
+            )}
+          </DragOverlay>,
+          document.body
+        )}
       </DndContext>
     </div>
   );

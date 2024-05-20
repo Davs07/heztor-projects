@@ -11,29 +11,44 @@ interface Props {
 export const ColumnContainer = (props: Props) => {
   const { column, deleteColumn } = props;
 
-  const { setNodeRef, attributes, listeners, transform, transition } =
-    useSortable({
-      id: column.id,
-      data: {
-        type: "column",
-        column,
-        /* id: column.id,
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: column.id,
+    data: {
+      type: "column",
+      column,
+      /* id: column.id,
           title: column.title,
           tasks: [],
           status: column.title, */
-      },
-    });
+    },
+  });
 
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
   };
 
+  if (isDragging) {
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        className="bg-black opacity-60 border-2 border-rose-500 border-secondary w-[350px] h-[500px] max-h-[500px] rounded-2xl flex flex-col "></div>
+    );
+  }
+
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className="border-secondary border w-[350px] h-[500px] max-h-[500px] rounded-2xl flex flex-col ">
+      className="bg-black border-secondary border w-[350px] h-[500px] max-h-[500px] rounded-2xl flex flex-col ">
       {/* Column Task Tittle */}
       <div
         {...attributes}
