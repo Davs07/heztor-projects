@@ -1,15 +1,53 @@
-import { Column } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Column, Id } from "@/types";
+import { useSortable } from "@dnd-kit/sortable";
+import { Ellipsis } from "lucide-react";
+import { CSS } from "@dnd-kit/utilities";
 
 interface Props {
   column: Column;
+  deleteColumn: (id: Id) => void;
 }
 export const ColumnContainer = (props: Props) => {
-  const { column } = props;
+  const { column, deleteColumn } = props;
+
+  const { setNodeRef, attributes, listeners, transform, transition } =
+    useSortable({
+      id: column.id,
+      data: {
+        type: "column",
+        column,
+        /* id: column.id,
+          title: column.title,
+          tasks: [],
+          status: column.title, */
+      },
+    });
+
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  };
+
   return (
-    <div className="bg-secondary w-[350px] h-[500px] max-h-[500px] rounded-2xl flex flex-col ">
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="border-secondary border w-[350px] h-[500px] max-h-[500px] rounded-2xl flex flex-col ">
       {/* Column Task Tittle */}
-      <div className="bg-card h-[60px] text-lg font-bold cursor-grab rounded-2xl rounded-b-none p-3 border-4 border-secondary">
-        {column.title}
+      <div
+        {...attributes}
+        {...listeners}
+        className=" h-[60px] text-lg font-bold cursor-grab rounded-2xl rounded-b-none p-3 ">
+        <div className="flex justify-between items-center">
+          <span>{column.title}</span>
+          <Button
+            variant={"none"}
+            size={"icon"}
+            onClick={() => deleteColumn(column.id)}>
+            <Ellipsis />
+          </Button>
+        </div>
       </div>
       {/* Column Task Container */}
       <div className="w-full h-full flex flex-grow"></div>
