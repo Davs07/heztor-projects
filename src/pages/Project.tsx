@@ -1,6 +1,9 @@
+import { KanbanBoard } from "@/sections/KanbanBoard";
 
 export const Project = () => {
   return (
-    <div>Project</div>
-  )
-}
+    <div>
+      <KanbanBoard />
+    </div>
+  );
+};
