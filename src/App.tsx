@@ -1,35 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Link, Route, Routes } from "react-router-dom";
+
+import { ChevronDown, Plus, SquareCheck } from "lucide-react";
+import { Button } from "./components/ui/button";
+import { PendingProjects } from "./pages/PendingProjects";
+import { Projects } from "./pages/Projects";
+import { Project } from "./pages/Project";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="h-screen overflow-hidden flex flex-row   bg-background ">
+      <aside className=" col-span-2 bg-card h-full w-[280px] justify-start p-4">
+        <div className="w-full h-full ">
+          <nav>
+            <ul className="flex flex-col">
+              <Button variant="outline" className="mb-2 ">
+                <Plus />
+                Crear Proyecto
+              </Button>
+              <li>
+                <Link to="/">
+                  <Button variant={"ghost"} className="w-full justify-start ">
+                    Pendiente
+                  </Button>
+                </Link>
+              </li>
+              <li>
+                <Link to="/projects">
+                  <Button
+                    variant={"ghost"}
+                    className="w-full justify-between font-bold ">
+                    Proyectos
+                    <ChevronDown />
+                  </Button>
+                </Link>
+              </li>
+              <li>
+                <Link to="/project">
+                  <Button
+                    variant={"ghost"}
+                    className="w-full justify-start gap-2 font-normal">
+                    <SquareCheck strokeWidth={1} height={15} />
+                    Proyecto
+                  </Button>
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+      <div className="w-full flex-1 flex justify-center overflow-y-auto ">
+        <Routes>
+          <Route path="/" element={<PendingProjects />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/project" element={<Project />} />
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
