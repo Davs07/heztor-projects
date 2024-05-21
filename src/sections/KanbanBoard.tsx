@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Column } from "@/types";
+import { Column, Task } from "@/types";
 import { PlusCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 import { ColumnContainer } from "./ColumnContainer";
@@ -20,6 +20,8 @@ const generateId = () => {
 };
 export const KanbanBoard = () => {
   const [columns, setColumns] = useState<Column[]>([]);
+
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   const columnsId = useMemo(
     () => columns.map((column) => column.id),
@@ -58,6 +60,18 @@ export const KanbanBoard = () => {
       return col;
     });
     setColumns(updatedColumns);
+  };
+
+  const createTask = (id: Column["id"]) => {
+    console.log(id);
+
+    const newTask: Task = {
+      id: generateId(),
+      name: `Task ${tasks.length}`,
+      columnId: id,
+      status: false,
+    };
+    setTasks([...tasks, newTask]);
   };
 
   const onDragStart = (event: DragStartEvent) => {
@@ -115,6 +129,8 @@ export const KanbanBoard = () => {
                   key={column.id}
                   deleteColumn={deleteColumn}
                   updateColumn={updateColumn}
+                  createTask={createTask}
+                  tasks={tasks.filter((task) => task.columnId === column.id)}
                 />
               ))}
             </SortableContext>
@@ -135,6 +151,8 @@ export const KanbanBoard = () => {
                 column={activeColumn}
                 deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
+                createTask={createTask}
+                tasks={tasks}
               />
             )}
           </DragOverlay>,

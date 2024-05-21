@@ -1,19 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { Column, Id } from "@/types";
+import { Column, Id, Task } from "@/types";
 import { useSortable } from "@dnd-kit/sortable";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, PlusCircle } from "lucide-react";
 import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
 
 interface Props {
   column: Column;
   deleteColumn: (id: Id) => void;
   updateColumn: (id: Id, title: string) => void;
+  createTask: (id: Id) => void;
+  tasks: Task[];
 }
 export const ColumnContainer = (props: Props) => {
-  const { column, deleteColumn, updateColumn } = props;
+  const { column, deleteColumn, updateColumn, createTask, tasks } = props;
 
   const [editMode, setEditMode] = useState(false);
 
@@ -47,7 +50,7 @@ export const ColumnContainer = (props: Props) => {
       <div
         ref={setNodeRef}
         style={style}
-        className=" opacity-60 border-2  border-secondary w-[350px] h-[500px] max-h-[500px] rounded-2xl flex flex-col "></div>
+        className=" opacity-60 border-2  border-secondary w-[350px] h-[700px] max-h-[700px] rounded-2xl flex flex-col "></div>
     );
   }
 
@@ -56,7 +59,7 @@ export const ColumnContainer = (props: Props) => {
       ref={setNodeRef}
       style={style}
       className={cn(
-        "  border border-transparent w-[350px] h-[500px] max-h-[500px] rounded-2xl flex flex-col ",
+        "  border border-transparent w-[350px] h-[700px] max-h-[700px] rounded-2xl flex flex-col ",
         hover && "border-gray-300 dark:border-secondary duration-1000"
       )}>
       {/* Column Task Tittle */}
@@ -95,9 +98,21 @@ export const ColumnContainer = (props: Props) => {
         </div>
       </div>
       {/* Column Task Container */}
-      <div className="w-full h-full flex flex-grow"></div>
+      <div className="w-full h-full flex flex-col flex-grow gap-4 overflow-x-hidden overflow-y-auto px-2">
+        {tasks.map((task) => (
+          <Card key={task.id} className="cursor-grab min-h-24 h-24 rounded-2xl">
+            <h4 className="text-lg">{task.name}</h4>
+          </Card>
+        ))}
+      </div>
       {/* Column Task Footer */}
-      <div>Footer</div>
+      <Button
+        className="gap-2 mt-4"
+        variant={"none"}
+        onClick={() => createTask(column.id)}>
+        <PlusCircle />
+        Añadir tarea
+      </Button>
     </div>
   );
 };
