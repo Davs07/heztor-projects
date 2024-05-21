@@ -66,14 +66,3 @@
   }
 }
 
-::-webkit-scrollbar {
-  width: 4px;
-}
-
-::-webkit-scrollbar:horizontal {
-  height: 16px;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-border;
-}

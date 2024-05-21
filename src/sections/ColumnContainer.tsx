@@ -5,6 +5,7 @@ import { Ellipsis } from "lucide-react";
 import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
 interface Props {
   column: Column;
@@ -16,6 +17,8 @@ export const ColumnContainer = (props: Props) => {
 
   const [editMode, setEditMode] = useState(false);
 
+  const [hover, setHover] = useState(false);
+
   const {
     setNodeRef,
     attributes,
@@ -23,15 +26,13 @@ export const ColumnContainer = (props: Props) => {
     transform,
     transition,
     isDragging,
+    isSorting,
+    isOver,
   } = useSortable({
     id: column.id,
     data: {
       type: "column",
       column,
-      /* id: column.id,
-          title: column.title,
-          tasks: [],
-          status: column.title, */
     },
     disabled: editMode,
   });
@@ -46,7 +47,7 @@ export const ColumnContainer = (props: Props) => {
       <div
         ref={setNodeRef}
         style={style}
-        className=" opacity-60 border-2 border-rose-500 border-secondary w-[350px] h-[500px] max-h-[500px] rounded-2xl flex flex-col "></div>
+        className=" opacity-60 border-2  border-secondary w-[350px] h-[500px] max-h-[500px] rounded-2xl flex flex-col "></div>
     );
   }
 
@@ -54,11 +55,17 @@ export const ColumnContainer = (props: Props) => {
     <div
       ref={setNodeRef}
       style={style}
-      className="border-secondary border w-[350px] h-[500px] max-h-[500px] rounded-2xl flex flex-col ">
+      className={cn(
+        "  border border-transparent w-[350px] h-[500px] max-h-[500px] rounded-2xl flex flex-col ",
+        hover && "border-gray-300 dark:border-secondary duration-1000"
+      )}>
       {/* Column Task Tittle */}
       <div
         {...attributes}
         {...listeners}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        onMouseDown={() => setHover(false)}
         onClick={() => setEditMode(true)}
         className=" h-[60px] text-lg font-bold cursor-grab rounded-2xl rounded-b-none p-3 ">
         <div className="flex justify-between items-center gap-3 max-h-10">

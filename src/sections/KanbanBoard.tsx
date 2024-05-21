@@ -93,7 +93,7 @@ export const KanbanBoard = () => {
   return (
     <div
       className="
-        m-auto
+        mx-auto
         flex
         min-h-screen
         w-full

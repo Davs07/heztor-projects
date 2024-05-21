@@ -1,5 +1,5 @@
 import { Link, Route, Routes } from "react-router-dom";
-
+import "./App.css"
 import { ChevronDown, Plus, SquareCheck } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { PendingProjects } from "./pages/PendingProjects";
@@ -10,7 +10,7 @@ function App() {
   return (
     <div
       className="h-screen overflow-hidden flex flex-row text-primary 
-bg-background ">
+bg-background dark">
       <aside className=" col-span-2 bg-card h-full w-[280px] justify-start p-4">
         <div className="w-full h-full ">
           <nav>
