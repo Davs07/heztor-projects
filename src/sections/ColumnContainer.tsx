@@ -3,6 +3,8 @@ import { Column, Id } from "@/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { Ellipsis } from "lucide-react";
 import { CSS } from "@dnd-kit/utilities";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 interface Props {
   column: Column;
@@ -10,6 +12,8 @@ interface Props {
 }
 export const ColumnContainer = (props: Props) => {
   const { column, deleteColumn } = props;
+
+  const [editMode, setEditMode] = useState(false);
 
   const {
     setNodeRef,
@@ -40,7 +44,7 @@ export const ColumnContainer = (props: Props) => {
       <div
         ref={setNodeRef}
         style={style}
-        className="bg-black opacity-60 border-2 border-rose-500 border-secondary w-[350px] h-[500px] max-h-[500px] rounded-2xl flex flex-col "></div>
+        className=" opacity-60 border-2 border-rose-500 border-secondary w-[350px] h-[500px] max-h-[500px] rounded-2xl flex flex-col "></div>
     );
   }
 
@@ -48,14 +52,35 @@ export const ColumnContainer = (props: Props) => {
     <div
       ref={setNodeRef}
       style={style}
-      className="bg-black border-secondary border w-[350px] h-[500px] max-h-[500px] rounded-2xl flex flex-col ">
+      className="border-secondary border w-[350px] h-[500px] max-h-[500px] rounded-2xl flex flex-col ">
       {/* Column Task Tittle */}
       <div
         {...attributes}
         {...listeners}
+        onClick={() => setEditMode(true)}
+        onKeyDown={(e) => {
+          if (e.key !== "Enter") {
+            return;
+          }
+          setEditMode(false);
+
+          /*  if (e.key === "Escape") {
+            setEditMode(false);
+          } */
+          //  e.key === "Enter" && setEditMode(true)
+        }}
         className=" h-[60px] text-lg font-bold cursor-grab rounded-2xl rounded-b-none p-3 ">
         <div className="flex justify-between items-center">
-          <span>{column.title}</span>
+          {editMode ? (
+            <Input
+              type="text"
+              className="w-full"
+              defaultValue={column.title}
+              onChange={(e) => (column.title = e.target.value)}
+            />
+          ) : (
+            <span>{column.title}</span>
+          )}
           <Button
             variant={"none"}
             size={"icon"}
