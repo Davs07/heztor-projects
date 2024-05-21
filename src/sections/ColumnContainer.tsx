@@ -9,9 +9,10 @@ import { Input } from "@/components/ui/input";
 interface Props {
   column: Column;
   deleteColumn: (id: Id) => void;
+  updateColumn: (id: Id, title: string) => void;
 }
 export const ColumnContainer = (props: Props) => {
-  const { column, deleteColumn } = props;
+  const { column, deleteColumn, updateColumn } = props;
 
   const [editMode, setEditMode] = useState(false);
 
@@ -32,6 +33,7 @@ export const ColumnContainer = (props: Props) => {
           tasks: [],
           status: column.title, */
     },
+    disabled: editMode,
   });
 
   const style = {
@@ -58,32 +60,28 @@ export const ColumnContainer = (props: Props) => {
         {...attributes}
         {...listeners}
         onClick={() => setEditMode(true)}
-        onKeyDown={(e) => {
-          if (e.key !== "Enter") {
-            return;
-          }
-          setEditMode(false);
-
-          /*  if (e.key === "Escape") {
-            setEditMode(false);
-          } */
-          //  e.key === "Enter" && setEditMode(true)
-        }}
         className=" h-[60px] text-lg font-bold cursor-grab rounded-2xl rounded-b-none p-3 ">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-3 max-h-10">
           {editMode ? (
             <Input
               type="text"
-              className="w-full"
-              defaultValue={column.title}
-              onChange={(e) => (column.title = e.target.value)}
+              className="w-full text-md focus-visible:ring-1 px-0 text-ellipsis "
+              autoFocus
+              value={column.title}
+              onBlur={() => setEditMode(false)}
+              onChange={(e) => updateColumn(column.id, e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key !== "Enter") return;
+                setEditMode(false);
+              }}
             />
           ) : (
-            <span>{column.title}</span>
+            <span className="ml-[1px]  truncate">{column.title}</span>
           )}
           <Button
             variant={"none"}
             size={"icon"}
+            className="min-w-10"
             onClick={() => deleteColumn(column.id)}>
             <Ellipsis />
           </Button>

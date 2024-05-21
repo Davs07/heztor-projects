@@ -50,6 +50,16 @@ export const KanbanBoard = () => {
     setColumns(filteredColumns);
   };
 
+  const updateColumn = (id: Column["id"], title: Column["title"]) => {
+    const updatedColumns = columns.map((col) => {
+      if (col.id === id) {
+        return { ...col, title };
+      }
+      return col;
+    });
+    setColumns(updatedColumns);
+  };
+
   const onDragStart = (event: DragStartEvent) => {
     console.log("DRAG START", event);
 
@@ -104,6 +114,7 @@ export const KanbanBoard = () => {
                   column={column}
                   key={column.id}
                   deleteColumn={deleteColumn}
+                  updateColumn={updateColumn}
                 />
               ))}
             </SortableContext>
@@ -123,6 +134,7 @@ export const KanbanBoard = () => {
               <ColumnContainer
                 column={activeColumn}
                 deleteColumn={deleteColumn}
+                updateColumn={updateColumn}
               />
             )}
           </DragOverlay>,
