@@ -10,7 +10,7 @@ function App() {
   return (
     <div
       className="h-screen overflow-hidden flex flex-row text-primary 
-bg-background dark">
+bg-background ">
       <aside className=" col-span-2 bg-card h-full w-[280px] justify-start p-4">
         <div className="w-full h-full ">
           <nav>
