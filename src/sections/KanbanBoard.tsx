@@ -77,6 +77,20 @@ export const KanbanBoard = () => {
     setTasks([...updatedTasks]);
   };
 
+  const updateTask = (id: Task["id"], name: Task["name"]) => {
+    const task = tasks.find((task) => task.id === id);
+
+    if (task) {
+      const updatedTasks = tasks.map((task) => {
+        if (task.id === id) {
+          return { ...task, name };
+        }
+        return task;
+      });
+      setTasks(updatedTasks);
+    }
+  };
+
   const onDragStart = (event: DragStartEvent) => {
     console.log("DRAG START", event);
 
@@ -133,8 +147,9 @@ export const KanbanBoard = () => {
                   deleteColumn={deleteColumn}
                   updateColumn={updateColumn}
                   createTask={createTask}
-                  deleteTask={deleteTask}
                   tasks={tasks.filter((task) => task.columnId === column.id)}
+                  deleteTask={deleteTask}
+                  updateTask={updateTask}
                 />
               ))}
             </SortableContext>
@@ -160,6 +175,7 @@ export const KanbanBoard = () => {
                   (task) => task.columnId === activeColumn.id
                 )}
                 deleteTask={deleteTask}
+                updateTask={updateTask}
               />
             )}
           </DragOverlay>,

@@ -1,13 +1,12 @@
+import TaskCard from "@/components/TaskCard";
 import { Button } from "@/components/ui/button";
-import { Column, Id, Task } from "@/types";
-import { useSortable } from "@dnd-kit/sortable";
-import { Ellipsis, PlusCircle } from "lucide-react";
-import { CSS } from "@dnd-kit/utilities";
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Card } from "@/components/ui/card";
-import TaskCard from "@/components/TaskCard";
+import { Column, Id, Task } from "@/types";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { Ellipsis, PlusCircle } from "lucide-react";
+import { useState } from "react";
 
 interface Props {
   column: Column;
@@ -16,10 +15,18 @@ interface Props {
   createTask: (id: Id) => void;
   deleteTask: (id: Id) => void;
   tasks: Task[];
+  updateTask: (id: Id, name: string) => void;
 }
 export const ColumnContainer = (props: Props) => {
-  const { column, deleteColumn, updateColumn, createTask, tasks, deleteTask } =
-    props;
+  const {
+    column,
+    deleteColumn,
+    updateColumn,
+    createTask,
+    tasks,
+    deleteTask,
+    updateTask,
+  } = props;
 
   const [editMode, setEditMode] = useState(false);
 
@@ -32,8 +39,6 @@ export const ColumnContainer = (props: Props) => {
     transform,
     transition,
     isDragging,
-    isSorting,
-    isOver,
   } = useSortable({
     id: column.id,
     data: {
@@ -103,7 +108,12 @@ export const ColumnContainer = (props: Props) => {
       {/* Column Task Container */}
       <div className="w-full h-full flex flex-col mt-4 flex-grow gap-4 overflow-x-hidden overflow-y-auto px-2 ">
         {tasks.map((task) => (
-          <TaskCard task={task} key={task.id} deleteTask={deleteTask} />
+          <TaskCard
+            task={task}
+            key={task.id}
+            deleteTask={deleteTask}
+            updateTask={updateTask}
+          />
         ))}
         <Button
           className="gap-2 justify-start"
