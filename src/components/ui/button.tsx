@@ -21,12 +21,16 @@ const buttonVariants = cva(
         my: "bg-background bg-card text-primary border border-slate-500 ",
         icon: "bg-primary text-primary-foreground hover:bg-primary/90",
         none: "hover:bg-accent",
+        none2: "hover:border-primary border border-transparent",
+        none3: "",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
+        icon2: "h-6 w-6",
+        icon3: "size-10",
       },
     },
     defaultVariants: {

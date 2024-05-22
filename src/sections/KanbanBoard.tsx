@@ -63,8 +63,6 @@ export const KanbanBoard = () => {
   };
 
   const createTask = (id: Column["id"]) => {
-    console.log(id);
-
     const newTask: Task = {
       id: generateId(),
       name: `Task ${tasks.length}`,
@@ -72,6 +70,11 @@ export const KanbanBoard = () => {
       status: false,
     };
     setTasks([...tasks, newTask]);
+  };
+
+  const deleteTask = (id: Task["id"]) => {
+    const updatedTasks = tasks.filter((task) => task.id !== id);
+    setTasks([...updatedTasks]);
   };
 
   const onDragStart = (event: DragStartEvent) => {
@@ -130,6 +133,7 @@ export const KanbanBoard = () => {
                   deleteColumn={deleteColumn}
                   updateColumn={updateColumn}
                   createTask={createTask}
+                  deleteTask={deleteTask}
                   tasks={tasks.filter((task) => task.columnId === column.id)}
                 />
               ))}
@@ -138,7 +142,7 @@ export const KanbanBoard = () => {
           <Button
             variant="outline"
             onClick={createNewColumn}
-            className="gap-2 ">
+            className="gap-2 w-[350px]">
             <PlusCircle size={18} />
             Añadir Columna
           </Button>
@@ -152,7 +156,10 @@ export const KanbanBoard = () => {
                 deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
                 createTask={createTask}
-                tasks={tasks}
+                tasks={tasks.filter(
+                  (task) => task.columnId === activeColumn.id
+                )}
+                deleteTask={deleteTask}
               />
             )}
           </DragOverlay>,
