@@ -5,6 +5,9 @@ import { Circle, Ellipsis } from "lucide-react";
 import { useState } from "react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import { useSortable } from "@dnd-kit/sortable";
+
+import { CSS } from "@dnd-kit/utilities";
 
 interface Props {
   task: Task;
@@ -19,9 +22,34 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
     setEditMode((prev) => !prev);
   };
 
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: task.id,
+    data: {
+      type: "Task",
+      task,
+    },
+    disabled: editMode,
+  });
+
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  };
+
   if (editMode) {
     return (
       <Card
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
         key={task.id}
         className="cursor-grab h-max min-h-16 rounded-2xl group"
         onClick={toggleEditMode}>
@@ -34,11 +62,12 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
               className="text-lg"
               defaultValue={task.name}
               onChange={(e) => updateTask(task.id, e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && e.shiftKey && toggleEditMode()}
+              onKeyDown={(e) =>
+                e.key === "Enter" && e.shiftKey && toggleEditMode()
+              }
               autoFocus
               onBlur={toggleEditMode}
               placeholder="Agrega una tarea"
-
             />
           </div>
 
@@ -56,6 +85,10 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
 
   return (
     <Card
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
       key={task.id}
       className="cursor-grab h-max min-h-16 rounded-2xl group"
       onClick={toggleEditMode}>

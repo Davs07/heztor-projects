@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Column, Id, Task } from "@/types";
-import { useSortable } from "@dnd-kit/sortable";
+import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Ellipsis, PlusCircle } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 interface Props {
   column: Column;
@@ -31,6 +31,14 @@ export const ColumnContainer = (props: Props) => {
   const [editMode, setEditMode] = useState(false);
 
   const [hover, setHover] = useState(false);
+
+  const tasksIds = useMemo(
+    () =>
+      tasks
+        .filter((task) => task.columnId === column.id)
+        .map((task) => task.id),
+    [tasks]
+  );
 
   const {
     setNodeRef,
@@ -67,7 +75,7 @@ export const ColumnContainer = (props: Props) => {
       ref={setNodeRef}
       style={style}
       className={cn(
-        "  border border-transparent w-[350px] h-[700px] max-h-[700px] rounded-2xl flex flex-col ",
+        "  border border-transparent w-[350px] h-full  rounded-2xl flex flex-col ",
         hover && "border-gray-300 dark:border-secondary duration-1000 pb-12"
       )}>
       {/* Column Task Tittle */}
@@ -107,14 +115,16 @@ export const ColumnContainer = (props: Props) => {
       </div>
       {/* Column Task Container */}
       <div className="w-full h-full flex flex-col mt-4 flex-grow gap-4 overflow-x-hidden overflow-y-auto px-2 ">
-        {tasks.map((task) => (
-          <TaskCard
-            task={task}
-            key={task.id}
-            deleteTask={deleteTask}
-            updateTask={updateTask}
-          />
-        ))}
+        <SortableContext items={tasksIds}>
+          {tasks.map((task) => (
+            <TaskCard
+              task={task}
+              key={task.id}
+              deleteTask={deleteTask}
+              updateTask={updateTask}
+            />
+          ))}
+        </SortableContext>
         <Button
           className="gap-2 justify-start"
           variant={"none"}
