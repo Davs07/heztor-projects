@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, Plus, SquareCheck } from "lucide-react";
 export const Navbar = () => {
   return (
-    <aside className=" col-span-2 bg-card h-full w-[280px] justify-start p-4">
+    <aside className=" col-span-2 bg-card h-full w-[280px] justify-start p-4 ">
       <div className="w-full h-full ">
         <nav>
           <ul className="flex flex-col">

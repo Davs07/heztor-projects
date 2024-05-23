@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-
-:root,html,body {
-
-    overflow: hidden;
-    overflow-y: hidden;
+:root,
+html,
+body {
+  overflow: hidden;
+  overflow-y: hidden;
 }
 
 @layer base {
@@ -72,4 +72,3 @@
     --ring: 212.7 26.8% 83.9%;
   }
 }
-

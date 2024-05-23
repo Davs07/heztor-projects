@@ -16,6 +16,7 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import TaskCard from "@/components/TaskCard";
+import { Separator } from "@/components/ui/separator";
 
 const generateId = () => {
   return Math.random().toString(36).substr(2, 9);
@@ -185,21 +186,23 @@ export const KanbanBoard = () => {
       className="
         flex
         flex-grow
-        min-h-[700px]
-        h-full
+        flex-col
+        min-h-[400px]
+        h-max 
         w-full
+        min-w-full
         items-start
         justify-start
         overflow-x-scroll
-        overflow-y-auto
-        px-10
+        overflow-y-hidden
+        
     ">
       <DndContext
         sensors={sensors}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}>
-        <div className=" flex  gap-4">
+        <div className=" flex flex-grow  gap-4 mx-4 h-full mb-64  ">
           <div className="flex gap-4">
             <SortableContext items={columnsId}>
               {columns.map((column) => (

@@ -66,7 +66,7 @@ export const ColumnContainer = (props: Props) => {
       <div
         ref={setNodeRef}
         style={style}
-        className="opacity-60 border-2  border-secondary w-[350px] h-full max-h-full rounded-2xl flex flex-col overflow-y-auto "></div>
+        className="opacity-60 border-2  border-secondary w-[350px] h-max bg-blue-500 rounded-2xl flex flex-col overflow-y-auto "></div>
     );
   }
 
@@ -75,7 +75,7 @@ export const ColumnContainer = (props: Props) => {
       ref={setNodeRef}
       style={style}
       className={cn(
-        "border border-transparent w-[350px] h-full max-h-full rounded-2xl flex flex-col",
+        "border border-transparent w-[350px] h-max max-h-full  rounded-2xl flex flex-col  overflow-y-auto",
         hover && "border-gray-300 dark:border-secondary duration-1000"
       )}>
       {/* Column Task Tittle */}
@@ -86,7 +86,7 @@ export const ColumnContainer = (props: Props) => {
         onMouseLeave={() => setHover(false)}
         onMouseDown={() => setHover(false)}
         onClick={() => setEditMode(true)}
-        className=" h-[60px] text-lg font-bold cursor-grab rounded-2xl rounded-b-none p-3 ">
+        className=" h-[60px] flex flex-col justify-center text-lg font-bold cursor-grab rounded-2xl rounded-b-none p-3 ">
         <div className="flex justify-between items-center gap-3 max-h-10">
           {editMode ? (
             <Input
@@ -114,7 +114,7 @@ export const ColumnContainer = (props: Props) => {
         </div>
       </div>
       {/* Column Task Container */}
-      <div className="w-full h-full flex flex-col mt-4 flex-grow gap-4 overflow-x-hidden overflow-y-auto px-2 ">
+      <div className="w-full h-full flex flex-col  flex-grow gap-2 overflow-x-hidden overflow-y-auto px-2 pb-4 ">
         <SortableContext items={tasksIds}>
           {tasks.map((task) => (
             <TaskCard
@@ -125,15 +125,16 @@ export const ColumnContainer = (props: Props) => {
             />
           ))}
         </SortableContext>
-        <Button
-          className="gap-2 justify-start"
-          variant={"none"}
-          onClick={() => createTask(column.id)}>
-          <PlusCircle />
-          Añadir tarea
-        </Button>
       </div>
       {/* Column Task Footer */}
+
+      <Button
+        className="gap-2 justify-start my-2 mx-2"
+        variant={"none"}
+        onClick={() => createTask(column.id)}>
+        <PlusCircle />
+        Añadir tarea
+      </Button>
     </div>
   );
 };

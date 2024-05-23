@@ -8,10 +8,10 @@ import { Navbar } from "./sections/Navbar";
 function App() {
   return (
     <div
-      className="h-screen overflow-hidden flex flex-row text-primary 
-bg-background dark">
-      {/* <Navbar /> */}
-      <div className="w-full flex-1 flex justify-center  ">
+      className="h-screen w-screen overflow-hidden flex flex-row text-primary 
+bg-background ">
+      <Navbar />
+      <div className="w-full h-full flex-grow flex justify-center ">
         <Routes>
           <Route path="/" element={<PendingProjects />} />
           <Route path="/projects" element={<Projects />} />
