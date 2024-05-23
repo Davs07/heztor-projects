@@ -14,6 +14,7 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
+import TaskCard from "@/components/TaskCard";
 
 const generateId = () => {
   return Math.random().toString(36).substr(2, 9);
@@ -29,6 +30,7 @@ export const KanbanBoard = () => {
   );
 
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
+  const [activeTask, setActiveTask] = useState<Task | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -94,8 +96,13 @@ export const KanbanBoard = () => {
   const onDragStart = (event: DragStartEvent) => {
     console.log("DRAG START", event);
 
-    if (event.active.data.current?.type === "column") {
+    if (event.active.data.current?.type === "Column") {
       setActiveColumn(event.active.data.current.column);
+      return;
+    }
+
+    if (event.active.data.current?.type === "Task") {
+      setActiveTask(event.active.data.current.task);
       return;
     }
   };
@@ -174,6 +181,13 @@ export const KanbanBoard = () => {
                 tasks={tasks.filter(
                   (task) => task.columnId === activeColumn.id
                 )}
+                deleteTask={deleteTask}
+                updateTask={updateTask}
+              />
+            )}
+            {activeTask && (
+              <TaskCard
+                task={activeTask}
                 deleteTask={deleteTask}
                 updateTask={updateTask}
               />
