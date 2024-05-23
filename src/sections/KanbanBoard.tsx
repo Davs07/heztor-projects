@@ -183,11 +183,13 @@ export const KanbanBoard = () => {
   return (
     <div
       className="
-        mx-auto
         flex
-        min-h-screen
+        flex-grow
+        min-h-[700px]
+        h-full
         w-full
-        items-center
+        items-start
+        justify-start
         overflow-x-scroll
         overflow-y-auto
         px-10
@@ -197,7 +199,7 @@ export const KanbanBoard = () => {
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}>
-        <div className="m-auto flex  gap-4">
+        <div className=" flex  gap-4">
           <div className="flex gap-4">
             <SortableContext items={columnsId}>
               {columns.map((column) => (

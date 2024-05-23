@@ -66,7 +66,7 @@ export const ColumnContainer = (props: Props) => {
       <div
         ref={setNodeRef}
         style={style}
-        className="opacity-60 border-2  border-secondary w-[350px] h-[700px] max-h-[700px] rounded-2xl flex flex-col "></div>
+        className="opacity-60 border-2  border-secondary w-[350px] h-full max-h-full rounded-2xl flex flex-col overflow-y-auto "></div>
     );
   }
 
@@ -75,8 +75,8 @@ export const ColumnContainer = (props: Props) => {
       ref={setNodeRef}
       style={style}
       className={cn(
-        "border border-transparent w-[350px] h-[700px] max-h-[700px] rounded-2xl flex flex-col",
-        hover && "border-gray-300 dark:border-secondary duration-1000 pb-12"
+        "border border-transparent w-[350px] h-full max-h-full rounded-2xl flex flex-col",
+        hover && "border-gray-300 dark:border-secondary duration-1000"
       )}>
       {/* Column Task Tittle */}
       <div

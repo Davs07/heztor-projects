@@ -5,6 +5,7 @@ export type Priority = "Muy alta" | "Alta" | "Media" | "Baja";
 export type Column = {
   id: Id;
   title: string;
+  projectId?: Id;
 };
 
 export type Task = {
@@ -15,17 +16,18 @@ export type Task = {
   status: boolean;
   deadline?: string;
   priority?: Priority;
+  type?: "Task" | "Event",
+  startTime?: Date;
+  endTime?: Date;
 };
 
-/* export type Project = {
-  id: id;
+export type Project = {
+  id: Id;
   name: string;
   description?: string;
   status: boolean;
-  createdAt?: string;
-  updatedAt?: string;
 };
-
+/*
 export type ProjectStatus = {
   id: id;
   name: string;
