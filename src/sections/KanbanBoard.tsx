@@ -6,6 +6,7 @@ import { ColumnContainer } from "./ColumnContainer";
 import {
   DndContext,
   DragEndEvent,
+  DragOverEvent,
   DragOverlay,
   DragStartEvent,
   PointerSensor,
@@ -108,6 +109,9 @@ export const KanbanBoard = () => {
   };
 
   const onDragEnd = (event: DragEndEvent) => {
+    setActiveColumn(null);
+    setActiveTask(null);
+
     const { active, over } = event;
 
     if (!over) return;
@@ -128,6 +132,28 @@ export const KanbanBoard = () => {
     });
   };
 
+  const onDragOver = (event: DragOverEvent) => {
+    const { active, over } = event;
+
+    if (!over) return;
+
+    const activeId = active.id;
+    const overId = over.id;
+
+    if (activeId === overId) return;
+
+    const isActiveTask = active.data.current?.type === "Task";
+    const isOverTask = over.data.current?.type === "Task";
+    if (isActiveTask && isOverTask) {
+      setTasks((tasks) => {
+        const activeIndex = tasks.findIndex((task) => task.id === activeId);
+        const overIndex = tasks.findIndex((task) => task.id === overId);
+
+        return arrayMove(tasks, activeIndex, overIndex);
+      });
+    }
+  };
+
   return (
     <div
       className="
@@ -143,7 +169,8 @@ export const KanbanBoard = () => {
       <DndContext
         sensors={sensors}
         onDragStart={onDragStart}
-        onDragEnd={onDragEnd}>
+        onDragEnd={onDragEnd}
+        onDragOver={onDragOver}>
         <div className="m-auto flex  gap-4">
           <div className="flex gap-4">
             <SortableContext items={columnsId}>
