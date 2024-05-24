@@ -1,4 +1,4 @@
-import { Id, Task } from "@/types";
+import { Id, Task } from "@/utils/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { Circle, Ellipsis } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
@@ -69,7 +69,7 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
       {...listeners}
       key={task.id}
       className={`cursor-grab h-max max-h-max min-h-16 rounded-2xl group ${
-        isDragging ? "" : "hover:shadow-lg"
+        isDragging ? "" : "hover:shadow-md"
       }`}
       onClick={editMode ? undefined : toggleEditMode}>
       <CardHeader className="flex flex-row justify-between items-start gap-2 h-max">

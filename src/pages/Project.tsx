@@ -1,7 +1,7 @@
 import { KanbanBoard } from "@/sections/KanbanBoard";
 import { projects } from "@/api/ProjectsData";
 import { useState } from "react";
-import { Project as ProjectType } from "@/types";
+import { Project as ProjectType } from "@/utils/types";
 import { ProjectInfo } from "@/sections/ProjectInfo";
 import { Separator } from "@/components/ui/separator";
 export const Project = () => {

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Column, Task } from "@/types";
+import { Column, Task } from "@/utils/types";
 import { PlusCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 import { ColumnContainer } from "./ColumnContainer";
@@ -16,11 +16,8 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import TaskCard from "@/components/TaskCard";
-import { Separator } from "@/components/ui/separator";
+import { generateId } from "@/utils/utilsProjects";
 
-const generateId = () => {
-  return Math.random().toString(36).substr(2, 9);
-};
 export const KanbanBoard = () => {
   const [columns, setColumns] = useState<Column[]>([]);
 

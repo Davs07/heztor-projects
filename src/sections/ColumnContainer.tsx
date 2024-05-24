@@ -2,7 +2,7 @@ import TaskCard from "@/components/TaskCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Column, Id, Task } from "@/types";
+import { Column, Id, Task } from "@/utils/types";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Ellipsis, PlusCircle } from "lucide-react";
@@ -114,7 +114,7 @@ export const ColumnContainer = (props: Props) => {
         </div>
       </div>
       {/* Column Task Container */}
-      <div className="w-full h-full flex flex-col  flex-grow gap-2 overflow-x-hidden overflow-y-auto px-2 pb-4 ">
+      <div className="w-full h-full flex flex-col  flex-grow gap-2 overflow-x-hidden overflow-y-auto px-2 pb-2 ">
         <SortableContext items={tasksIds}>
           {tasks.map((task) => (
             <TaskCard

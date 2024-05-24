@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { Project } from "@/types";
+import { Project } from "@/utils/types";
 
 interface Props {
   project: Project;

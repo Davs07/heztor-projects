@@ -16,7 +16,7 @@ export type Task = {
   status: boolean;
   deadline?: string;
   priority?: Priority;
-  type?: "Task" | "Event",
+  type?: "Task" | "Event";
   startTime?: Date;
   endTime?: Date;
 };
