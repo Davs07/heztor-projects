@@ -19,16 +19,4 @@ export const projects: Project[] = [
     description: "This is the third project",
     status: true,
   },
-  {
-    id: 4,
-    name: "Project 4",
-    description: "This is the fourth project",
-    status: false,
-  },
-  {
-    id: 5,
-    name: "Project 5",
-    description: "This is the fifth project",
-    status: true,
-  },
 ];

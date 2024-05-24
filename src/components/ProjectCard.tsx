@@ -38,7 +38,7 @@ export const ProjectCard = ({ project, onUpdateName }: Props) => {
     }
   }, [editMode]);
   return (
-    <Card className=" px-2 w-[300px] min-h-[80px] h-max max-h-max rounded-2xl border-border border group">
+    <Card className=" px-2 w-[250px] min-h-[80px] h-max max-h-max rounded-2xl border-border border group">
       <CardHeader className="flex flex-row w-full h-max justify-between items-center gap-3 ">
         <div className="w-full">
           {editMode ? (

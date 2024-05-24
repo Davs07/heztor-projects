@@ -11,6 +11,7 @@ export type Column = {
 export type Task = {
   id: Id;
   columnId: Id;
+
   name: string;
   description?: string;
   status: boolean;
