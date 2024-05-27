@@ -185,7 +185,8 @@ export const KanbanBoard = () => {
         flex-grow
         flex-col
         min-h-[400px]
-        h-max 
+        h-full
+        max-h-full
         w-full
         min-w-full
         items-start
@@ -199,8 +200,8 @@ export const KanbanBoard = () => {
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}>
-        <div className=" flex flex-grow  gap-4 mx-4 h-full mb-64  ">
-          <div className="flex gap-4">
+        <div className=" flex flex-grow  gap-4 mx-4  ">
+          <div className="flex gap-4 ">
             <SortableContext items={columnsId}>
               {columns.map((column) => (
                 <ColumnContainer
@@ -219,7 +220,7 @@ export const KanbanBoard = () => {
           <Button
             variant="outline"
             onClick={createNewColumn}
-            className="gap-2 w-[350px]">
+            className="gap-2 w-[350px] bg-transparent">
             <PlusCircle size={18} />
             Añadir Columna
           </Button>

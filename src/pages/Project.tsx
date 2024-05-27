@@ -1,18 +1,31 @@
-import { KanbanBoard } from "@/sections/KanbanBoard";
 import { projects } from "@/api/ProjectsData";
 import { useState } from "react";
 import { Project as ProjectType } from "@/utils/types";
+import { KanbanBoard } from "@/sections/KanbanBoard";
 import { ProjectInfo } from "@/sections/ProjectInfo";
-import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 export const Project = () => {
-  const [project, setProject] = useState<ProjectType>(projects[0]);
+  const [project] = useState<ProjectType>(projects[0]);
 
   return (
-    <div className="w-full flex-col flex gap-2 min-h-screen h-screen max-h-screen ">
-      <ProjectInfo project={project} />
+    <div className="w-full  flex flex-col h-screen overflow-x-auto">
+      <div className="place-content-center min-h-24 h-24 text-center">
+        <h2>{project.name}</h2>
+      </div>
 
-
-      <KanbanBoard />
+      <Tabs defaultValue="tasks" className="h-full  flex flex-col ">
+        <TabsList className="w-max mx-2 ">
+          <TabsTrigger value="details">Detalles</TabsTrigger>
+          <TabsTrigger value="tasks">Tareas</TabsTrigger>
+        </TabsList>
+        <TabsContent value="details" className="h-full ">
+          <ProjectInfo project={project} />
+        </TabsContent>
+        <TabsContent value="tasks" className="h-full ">
+          <KanbanBoard />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

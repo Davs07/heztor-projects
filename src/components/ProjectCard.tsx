@@ -1,5 +1,5 @@
 import { Id, Project } from "@/utils/types";
-import { Card, CardContent, CardHeader } from "./ui/card";
+import { Card, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
 import { Ellipsis } from "lucide-react";
 import { Textarea } from "./ui/textarea";
@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from "react";
 interface Props {
   project: Project;
   onUpdateName: (id: Id, name: string) => void;
-  //Project has id: Id;  name: string;   description?: string;   status: boolean;
 }
 
 export const ProjectCard = ({ project, onUpdateName }: Props) => {

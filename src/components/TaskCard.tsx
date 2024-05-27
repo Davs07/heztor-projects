@@ -96,7 +96,7 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
               placeholder="Agrega una tarea"
             />
           ) : (
-            <h4 className="text-md">{task.name}</h4>
+            <h6 className="text-md">{task.name}</h6>
           )}
         </div>
 

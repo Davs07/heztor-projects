@@ -47,6 +47,7 @@ export const ColumnContainer = (props: Props) => {
     transform,
     transition,
     isDragging,
+    isSorting,
   } = useSortable({
     id: column.id,
     data: {
@@ -66,7 +67,7 @@ export const ColumnContainer = (props: Props) => {
       <div
         ref={setNodeRef}
         style={style}
-        className="opacity-60 border-2  border-secondary w-[350px] h-max bg-blue-500 rounded-2xl flex flex-col overflow-y-auto "></div>
+        className="opacity-60 border-2  border-secondary w-[350px] h-max max-h-[calc(100vh-11em)]  rounded-2xl flex flex-col overflow-y-auto "></div>
     );
   }
 
@@ -75,7 +76,7 @@ export const ColumnContainer = (props: Props) => {
       ref={setNodeRef}
       style={style}
       className={cn(
-        "border border-transparent w-[350px] h-max max-h-full  rounded-2xl flex flex-col  overflow-y-auto",
+        "border border-transparent w-[350px] h-max max-h-[calc(100vh-11em)]  rounded-2xl flex flex-col  overflow-y-auto",
         hover && "border-gray-300 dark:border-secondary duration-1000"
       )}>
       {/* Column Task Tittle */}
@@ -114,7 +115,7 @@ export const ColumnContainer = (props: Props) => {
         </div>
       </div>
       {/* Column Task Container */}
-      <div className="w-full h-full flex flex-col  flex-grow gap-2 overflow-x-hidden overflow-y-auto px-2 pb-2 ">
+      <div className="w-full h-full flex flex-col  gap-2 overflow-x-hidden overflow-y-auto px-2 pb-2 ">
         <SortableContext items={tasksIds}>
           {tasks.map((task) => (
             <TaskCard
