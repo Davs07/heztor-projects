@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Column, Task } from "@/utils/types";
+import { Column, Id, Task } from "@/utils/types";
 import { PlusCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 import { ColumnContainer } from "./ColumnContainer";
@@ -16,17 +16,28 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import TaskCard from "@/components/TaskCard";
-import { generateId } from "@/utils/utilsProjects";
+import { ProjectsState, useProjectsStore } from "@/store/projectsStore";
 
-export const KanbanBoard = () => {
-  const [columns, setColumns] = useState<Column[]>([]);
+export const KanbanBoard = ({ projectId }: { projectId: Id }) => {
+  const columnsAll = useProjectsStore((s: ProjectsState) => s.columns);
+  const tasksAll = useProjectsStore((s: ProjectsState) => s.tasks);
+  const addColumn = useProjectsStore((s: ProjectsState) => s.addColumn);
+  const deleteColumnStore = useProjectsStore((s: ProjectsState) => s.deleteColumn);
+  const updateColumnStore = useProjectsStore((s: ProjectsState) => s.updateColumn);
+  const addTask = useProjectsStore((s: ProjectsState) => s.addTask);
+  const deleteTaskStore = useProjectsStore((s: ProjectsState) => s.deleteTask);
+  const updateTaskStore = useProjectsStore((s: ProjectsState) => s.updateTask);
+  const moveTaskStore = useProjectsStore((s: ProjectsState) => s.moveTask);
 
-  const [tasks, setTasks] = useState<Task[]>([]);
-
-  const columnsId = useMemo(
-    () => columns.map((column) => column.id),
-    [columns]
+  const columns = useMemo(
+    () => columnsAll.filter((c: Column) => String(c.projectId) === String(projectId)),
+    [columnsAll, projectId]
   );
+  const tasks = useMemo(
+    () => tasksAll.filter((t: Task) => columns.some((c: Column) => c.id === t.columnId)),
+    [tasksAll, columns]
+  );
+  const columnsId = useMemo(() => columns.map((c: Column) => c.id), [columns]);
 
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
@@ -40,60 +51,27 @@ export const KanbanBoard = () => {
   );
 
   const createNewColumn = () => {
-    const columnToAdd: Column = {
-      id: generateId(),
-      title: `Column ${columns.length + 1}`,
-    };
-
-    setColumns([...columns, columnToAdd]);
+    addColumn(projectId, `Columna ${columns.length + 1}`);
   };
 
   const deleteColumn = (id: Column["id"]) => {
-    const filteredColumns = columns.filter((col) => col.id !== id);
-    setColumns(filteredColumns);
-
-    const newTasks = tasks.filter((task) => task.columnId !== id);
-
-    setTasks(newTasks);
+    deleteColumnStore(id);
   };
 
   const updateColumn = (id: Column["id"], title: Column["title"]) => {
-    const updatedColumns = columns.map((col) => {
-      if (col.id === id) {
-        return { ...col, title };
-      }
-      return col;
-    });
-    setColumns(updatedColumns);
+    updateColumnStore(id, { title });
   };
 
   const createTask = (id: Column["id"]) => {
-    const newTask: Task = {
-      id: generateId(),
-      name: `Task ${tasks.length}`,
-      columnId: id,
-      status: false,
-    };
-    setTasks([...tasks, newTask]);
+    addTask(id, { name: `Tarea ${tasks.length}` });
   };
 
   const deleteTask = (id: Task["id"]) => {
-    const updatedTasks = tasks.filter((task) => task.id !== id);
-    setTasks([...updatedTasks]);
+    deleteTaskStore(id);
   };
 
   const updateTask = (id: Task["id"], name: Task["name"]) => {
-    const task = tasks.find((task) => task.id === id);
-
-    if (task) {
-      const updatedTasks = tasks.map((task) => {
-        if (task.id === id) {
-          return { ...task, name };
-        }
-        return task;
-      });
-      setTasks(updatedTasks);
-    }
+    updateTaskStore(id, { name });
   };
 
   const onDragStart = (event: DragStartEvent) => {
@@ -111,8 +89,8 @@ export const KanbanBoard = () => {
   };
 
   const onDragEnd = (event: DragEndEvent) => {
-    setActiveColumn(null);
-    setActiveTask(null);
+  setActiveColumn(null);
+  setActiveTask(null);
 
     const { active, over } = event;
 
@@ -123,11 +101,7 @@ export const KanbanBoard = () => {
 
     if (activeId === overId) return;
 
-    setColumns((columns) => {
-      const activeColumnIndex = columns.findIndex((col) => col.id === activeId);
-      const overColumnIndex = columns.findIndex((col) => col.id === overId);
-      return arrayMove(columns, activeColumnIndex, overColumnIndex);
-    });
+    // Column reordering is global; keep simple KISS by not persisting order for now
   };
 
   const onDragOver = (event: DragOverEvent) => {
@@ -149,16 +123,11 @@ export const KanbanBoard = () => {
     // I'm dropping a Task over another task
 
     if (isActiveTask && isOverTask) {
-      setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((task) => task.id === activeId);
-        const overIndex = tasks.findIndex((task) => task.id === overId);
-
-        // if (tasks[activeIndex].columnId !== tasks[overIndex].columnId) {
-        tasks[activeIndex].columnId = tasks[overIndex].columnId;
-        // }
-
-        return arrayMove(tasks, activeIndex, overIndex);
-      });
+  const activeIndex = tasks.findIndex((task: Task) => task.id === activeId);
+  const overIndex = tasks.findIndex((task: Task) => task.id === overId);
+      if (activeIndex === -1 || overIndex === -1) return;
+      const toColumnId = tasks[overIndex].columnId;
+      moveTaskStore(activeId, toColumnId, overIndex);
     }
 
     const isOverAColumn = over.data.current?.type === "Column";
@@ -166,15 +135,7 @@ export const KanbanBoard = () => {
     // I'm dropping a Task over a column
 
     if (isActiveTask && isOverAColumn) {
-      setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((task) => task.id === activeId);
-
-        // if (tasks[activeIndex].columnId !== tasks[overIndex].columnId) {
-        tasks[activeIndex].columnId = overId;
-        // }
-
-        return arrayMove(tasks, activeIndex, activeIndex);
-      });
+      moveTaskStore(activeId, overId);
     }
   };
 
@@ -203,14 +164,14 @@ export const KanbanBoard = () => {
         <div className=" flex flex-grow  gap-4 mx-4  ">
           <div className="flex gap-4 ">
             <SortableContext items={columnsId}>
-              {columns.map((column) => (
+              {columns.map((column: Column) => (
                 <ColumnContainer
                   column={column}
                   key={column.id}
                   deleteColumn={deleteColumn}
                   updateColumn={updateColumn}
                   createTask={createTask}
-                  tasks={tasks.filter((task) => task.columnId === column.id)}
+                  tasks={tasks.filter((task: Task) => task.columnId === column.id)}
                   deleteTask={deleteTask}
                   updateTask={updateTask}
                 />
@@ -234,9 +195,7 @@ export const KanbanBoard = () => {
                 deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
                 createTask={createTask}
-                tasks={tasks.filter(
-                  (task) => task.columnId === activeColumn.id
-                )}
+                tasks={tasks.filter((task: Task) => task.columnId === activeColumn.id)}
                 deleteTask={deleteTask}
                 updateTask={updateTask}
               />

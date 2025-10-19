@@ -1,36 +1,23 @@
-import { useState } from "react";
-import { projects as initialProjects } from "@/api/ProjectsData";
+import { useNavigate } from "react-router-dom";
 import { Project } from "@/utils/types";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { generateId } from "@/utils/utilsProjects";
+import { ProjectsState, useProjectsStore } from "@/store/projectsStore";
 
 export const Projects = () => {
-  const [projects, setProjects] = useState<Project[]>(initialProjects);
+  const projects = useProjectsStore((s: ProjectsState) => s.projects);
+  const addProject = useProjectsStore((s: ProjectsState) => s.addProject);
+  const updateProject = useProjectsStore((s: ProjectsState) => s.updateProject);
+  const navigate = useNavigate();
 
   const onCreateProject = () => {
-    const newProject = {
-      id: generateId(),
-      name: "New Project",
-      status: false,
-    };
-
-    setProjects([...projects, newProject]);
+    const p = addProject({ name: "Nuevo Proyecto" });
+    navigate(`/project/${p.id}`);
   };
 
   const onUpdateName = (id: Project["id"], name: Project["name"]) => {
-    const project = projects.find((project) => project.id === id);
-
-    if (project) {
-      const updatedProjects = projects.map((project) => {
-        if (project.id === id) {
-          return { ...project, name };
-        }
-        return project;
-      });
-      setProjects(updatedProjects);
-    }
+    updateProject(id, { name });
   };
 
   return (
@@ -39,12 +26,13 @@ export const Projects = () => {
 
       <div className="flex justify-center w-full">
         <div className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4  ">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onUpdateName={onUpdateName}
-            />
+          {projects.map((project: Project) => (
+            <div key={project.id} onDoubleClick={() => navigate(`/project/${project.id}`)}>
+              <ProjectCard
+                project={project}
+                onUpdateName={onUpdateName}
+              />
+            </div>
           ))}
           <Button
             className="flex items-center gap-2 w-[250px] h-[80px] px-2 bg-transparent shadow-none rounded-2xl hover:bg-gray-100 text-gray-400 hover:text-primary"

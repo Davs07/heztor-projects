@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { Ellipsis } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   project: Project;
@@ -13,6 +14,7 @@ interface Props {
 export const ProjectCard = ({ project, onUpdateName }: Props) => {
   const [editMode, setEditMode] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const navigate = useNavigate();
 
   const toggleEditMode = () => setEditMode((prev) => !prev);
   const disableEditMode = () => setEditMode(false);
@@ -37,7 +39,10 @@ export const ProjectCard = ({ project, onUpdateName }: Props) => {
     }
   }, [editMode]);
   return (
-    <Card className=" px-2 w-[250px] min-h-[80px] h-max max-h-max rounded-2xl border-border border group">
+    <Card
+      className=" px-2 w-[250px] min-h-[80px] h-max max-h-max rounded-2xl border-border border group"
+      onDoubleClick={() => navigate(`/project/${project.id}`)}
+    >
       <CardHeader className="flex flex-row w-full h-max justify-between items-center gap-3 ">
         <div className="w-full">
           {editMode ? (
