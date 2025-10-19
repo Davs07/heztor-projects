@@ -1,4 +1,5 @@
 import TaskCard from "@/components/TaskCard";
+import { useProjectsStore, ProjectsState } from "@/store/projectsStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -16,6 +17,7 @@ interface Props {
   deleteTask: (id: Id) => void;
   tasks: Task[];
   updateTask: (id: Id, name: string) => void;
+  updateTaskStatus?: (id: Id, status: boolean) => void;
 }
 export const ColumnContainer = (props: Props) => {
   const {
@@ -26,18 +28,18 @@ export const ColumnContainer = (props: Props) => {
     tasks,
     deleteTask,
     updateTask,
+    updateTaskStatus,
   } = props;
+  const updateTaskStatusStore = useProjectsStore(
+    (s: ProjectsState) => s.updateTask
+  );
 
   const [editMode, setEditMode] = useState(false);
 
   const [hover, setHover] = useState(false);
 
   const tasksIds = useMemo(() => {
-    return (
-      tasks
-        // .filter((task) => task.columnId === column.id)
-        .map((task) => task.id)
-    );
+    return tasks.map((task: Task) => task.id);
   }, [tasks]);
 
   const {
@@ -117,12 +119,15 @@ export const ColumnContainer = (props: Props) => {
       {/* Column Task Container */}
       <div className="w-full h-full flex flex-col  gap-2 overflow-x-hidden overflow-y-auto px-2 pb-2 ">
         <SortableContext items={tasksIds}>
-          {tasks.map((task) => (
+          {tasks.map((task: Task) => (
             <TaskCard
               task={task}
               key={task.id}
               deleteTask={deleteTask}
               updateTask={updateTask}
+              updateTaskStatus={(id: Id, status: boolean) =>
+                updateTaskStatusStore(id, { status })
+              }
             />
           ))}
         </SortableContext>
