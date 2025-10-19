@@ -1,30 +1,71 @@
-# React + TypeScript + Vite
+# Heztor Projects
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación Kanban para gestionar proyectos y tareas.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Qué incluye
 
-## Expanding the ESLint configuration
+- React + Vite + TypeScript
+- Tailwind CSS (estilos presentes en el proyecto)
+- Zustand para estado global y persistencia en localStorage
+- Drag & Drop básico con `@dnd-kit/core` y `@dnd-kit/sortable`
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Páginas principales:
 
-- Configure the top-level `parserOptions` property like this:
+- `/` - Panel principal (bienvenida, fecha/hora, clima de ejemplo, proyectos y tareas pendientes)
+- `/projects` - Listado de proyectos (crear, editar nombre)
+- `/project/:id` - Detalle de proyecto con tabs (Detalles, Tareas/Kanban)
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+---
+
+## Mejoras realizadas
+
+- Store global: `src/store/projectsStore.ts` (Zustand + persistencia)
+- Integración de las páginas para usar el store (Projects, Project, KanbanBoard, Navbar)
+- Crear y editar proyectos; persistencia en `localStorage`
+- Gestión de columnas y tareas por proyecto; DnD para tareas
+- UI mínima y coherente (principio KISS): mejora en listado de proyectos, tarjetas y panel principal
+
+---
+
+## Requisitos
+
+- Node.js 18+ (recomendado)
+- npm
+
+## Instalación
+
+Desde la raíz del repositorio:
+
+```cmd
+npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Desarrollo
+
+Inicia el servidor de desarrollo:
+
+```cmd
+npm run dev
+```
+
+Abre la URL que muestre Vite (por defecto http://localhost:5173).
+
+## Build y preview
+
+```cmd
+npm run build
+npm run preview
+```
+
+---
+
+## Archivos clave
+
+- `src/store/projectsStore.ts` — store central (projects, columns, tasks)
+- `src/pages/Projects.tsx` — listado de proyectos
+- `src/pages/Project.tsx` — detalle por proyecto
+- `src/sections/KanbanBoard.tsx` — tablero Kanban
+- `src/components/TaskCard.tsx` — tarjeta de tarea (marcar/editar/eliminar)
+- `src/sections/Navbar.tsx` — sidebar y navegación
